@@ -234,7 +234,11 @@ Akamai::Open::DiagnosticTools - The Akamai Open DiagnosticTools API Perl client
  $client->client_token('barfoo');
  $client->client_secret('Zm9vYmFyYmFyZm9v');
 
- my $req = Akamai::Open::DiagnosticTools->new(client => $client);
+ my $diag = Akamai::Open::DiagnosticTools->new(client => $client);
+ $diag->baseurl('http://mybaseurl.luna.akamaiapis.net');
+ my $loc  = $diag->locations();
+ my $dig  = $diag->dig({hostname => 'cpan.org', queryType => 'A', location => 'Frankfurt, Germany'});
+ my $mtr  = $diag->mtr({destinationDomain => 'cpan.org', sourceIp => '23.62.61.24'});
 
 =head1 ABOUT
 
@@ -243,7 +247,105 @@ Akamai Open DiagnosticTools API which is described L<here|https://developer.akam
 
 =head1 USAGE
 
-TBD
+All API calls for the DiagnosticTools API are described and explained
+at the L<Akamai Open DiagnosticTools API Portal|https://developer.akamai.com/api/luna/diagnostic-tools/reference.html>.
+
+=head2 Akamai::Open::DiagnosticTools->new(client => $client)
+
+For every I<Akamai::Open> API call you'll need some client credentials.
+These are provided by the L<Akamai::Open:Client|http://search.cpan.org/perldoc?Akamai::Open::Client> 
+module and can reviewed at the LUNA control center.
+
+A succesfull call to I<new()> will return a I<Moose> powered 
+I<Akamai::Open::DiagnosticTools> object.
+
+=head2 $diag->baseurl($baseurl)
+
+To successfully access an I<Akamai Open API> you'll need a baseurl, 
+which is provided by the I<LUNA control center Manage API Portal> 
+and is uniq to every configured API user and API itself.
+
+I<baseurl()> is a I<Moose> powered getter/setter method, to set 
+and receive the object's assigned baseurl.
+
+=head2 $diag->locations()
+
+To initiate diagnostinc actions inside the Akamai network, you'll 
+the information about the locations from which diagnostic actions 
+are available.
+
+I<locations()> provides the informations. On success it returns a 
+Perl-style array reference. On error it returns I<undef> and sets 
+the I<last_error()> appropriate.
+
+=head2 $diag->mtr($hash_ref)
+
+I<mtr()> returns a network trace as the well know I<mtr> Unix command.
+
+I<mtr()> accepts the following parameters in $hash_ref as a Perl-style
+hash reference:
+
+=over 4
+
+=item * destinationDomain
+
+The domain name you want to get information about. Example: I<cpan.org>.
+This parameter is mandatory.
+
+=item * location
+
+Location of Akamai Server you want to run mtr from. You can find 
+servers using I<locations()> call. This paramter is optional. 
+Either location or sourceIp has to be passed to I<mtr()>
+
+=item * sourceIp
+
+A Akamai Server IP you want to run mtr from. This paramter is optional. 
+Either location or sourceIp has to be passed to I<mtr()>
+
+=back
+
+On success it returns a Perl-style hash reference. On error it returns 
+I<undef> and sets the I<last_error()> appropriate.
+
+=head2 $diag->dig($hash_ref)
+
+I<dig()> returns a network trace as the well know I<mtr> Unix command.
+
+I<dig()> accepts the following parameters in $hash_ref as a Perl-style
+hash reference:
+
+=over 4
+
+=item * hostname
+
+The hostname you want to get information about. Example: I<cpan.org>.
+This parameter is mandatory.
+
+=item * queryType
+
+The query type for the dig command call, valid types are  A, AAAA, 
+PTR, SOA, MX and CNAME. This parameter is mandatory.
+
+=item * location
+
+Location of Akamai Server you want to run dig from. You can find 
+servers using I<locations()> call. This paramter is optional. 
+Either location or sourceIp has to be passed to I<dig()>
+
+=item * sourceIp
+
+A Akamai Server IP you want to run dig from. This paramter is optional. 
+Either location or sourceIp has to be passed to I<dig()>
+
+=back
+
+On success it returns a Perl-style hash reference. On error it returns 
+I<undef> and sets the I<last_error()> appropriate.
+
+=head2 $diag->last_error()
+
+Just returns the last occured error.
 
 =head1 AUTHOR
 
