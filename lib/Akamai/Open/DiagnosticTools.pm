@@ -10,7 +10,7 @@ BEGIN {
 
 use strict;
 use warnings;
-use feature qw/switch/;
+use v5.10;
 
 use Moose;
 use JSON;
@@ -270,9 +270,9 @@ and receive the object's assigned baseurl.
 
 =head2 $diag->locations()
 
-To initiate diagnostinc actions inside the Akamai network, you'll 
-the information about the locations from which diagnostic actions 
-are available.
+To initiate diagnostinc actions inside the Akamai network, you'll
+need the information about the locations from which diagnostic 
+actions are available.
 
 I<locations()> provides the informations. On success it returns a 
 Perl-style array reference. On error it returns I<undef> and sets 
@@ -280,7 +280,7 @@ the I<last_error()> appropriate.
 
 =head2 $diag->mtr($hash_ref)
 
-I<mtr()> returns a network trace as the well know I<mtr> Unix command.
+I<mtr()> returns a network trace like the well know I<mtr> Unix command.
 
 I<mtr()> accepts the following parameters in $hash_ref as a Perl-style
 hash reference:
@@ -294,8 +294,8 @@ This parameter is mandatory.
 
 =item * location
 
-Location of Akamai Server you want to run mtr from. You can find 
-servers using I<locations()> call. This paramter is optional. 
+Location of a Akamai Server you want to run mtr from. You can find 
+servers using the I<locations()> call. This paramter is optional. 
 Either location or sourceIp has to be passed to I<mtr()>
 
 =item * sourceIp
@@ -308,9 +308,34 @@ Either location or sourceIp has to be passed to I<mtr()>
 On success it returns a Perl-style hash reference. On error it returns 
 I<undef> and sets the I<last_error()> appropriate.
 
+The hash reference has the following format:
+
+  {
+     'source' => ...,
+     'packetLoss' => '...',
+     'destination' => '...',
+     'errorString' => ...,
+     'analysis' => '...',
+     'host' => '...',
+     'avgLatency' => '...',
+     'hops' => [
+                 {
+                   'num' => '...',
+                   'avg' => '...',
+                   'last' => '...',
+                   'stDev' => '...',
+                   'host' => '...',
+                   'worst' => '...',
+                   'loss' => '...',
+                   'sent' => '...',
+                   'best' => '...'
+                 }
+               ]
+  }
+
 =head2 $diag->dig($hash_ref)
 
-I<dig()> returns a network trace as the well know I<mtr> Unix command.
+I<dig()> returns dns information like the well know I<dig> Unix command.
 
 I<dig()> accepts the following parameters in $hash_ref as a Perl-style
 hash reference:
@@ -324,13 +349,13 @@ This parameter is mandatory.
 
 =item * queryType
 
-The query type for the dig command call, valid types are  A, AAAA, 
+The query type for the dig command call, valid types are A, AAAA, 
 PTR, SOA, MX and CNAME. This parameter is mandatory.
 
 =item * location
 
 Location of Akamai Server you want to run dig from. You can find 
-servers using I<locations()> call. This paramter is optional. 
+servers using the I<locations()> call. This paramter is optional. 
 Either location or sourceIp has to be passed to I<dig()>
 
 =item * sourceIp
@@ -342,6 +367,35 @@ Either location or sourceIp has to be passed to I<dig()>
 
 On success it returns a Perl-style hash reference. On error it returns 
 I<undef> and sets the I<last_error()> appropriate.
+
+The hash reference has the following format:
+
+  {
+      'authoritySection' => [
+                             {
+                                'recordType' => '...',
+                                'domain' => '...',
+                                'value' => '...',
+                                'ttl' => '...',
+                                'preferenceValues' => ...,
+                                'recordClass' => '...'
+                              }
+                            ],
+      'answerSection' => [
+                          {
+                             'recordType' => '...',
+                             'domain' => '...',
+                             'value' => '...',
+                             'ttl' => '...',
+                             'preferenceValues' => ...,
+                             'recordClass' => '...'
+                           }
+                         ],
+      'errorString' => ...,
+      'queryType' => '...',
+      'hostname' => '...',
+      'result' => '...'
+  }
 
 =head2 $diag->last_error()
 

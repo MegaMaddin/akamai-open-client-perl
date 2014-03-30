@@ -42,6 +42,9 @@ sub gen_uuid {
 }
 
 1;
+
+__END__
+
 =pod
 
 =encoding utf-8
@@ -52,7 +55,8 @@ Akamai::Open::Request - The request handler for the Akamai Open API Perl clients
 
 =head1 ABOUT
 
-TBD TBD TBD
+I<Akamai::Open::Request> is the internal used request 
+handler, based on I<HTTP::Request> and I<LWP::UserAgent>.
 
 =head1 AUTHOR
 
