@@ -17,8 +17,11 @@ my $debug = Akamai::Open::Debug->initialize(config => $log_conf);
 my $clone = Akamai::Open::Debug->instance();
 my @array = (1, 2, 'a', 'b');
 
+# object tests
 isa_ok($debug,      'Akamai::Open::Debug');
 isa_ok($clone,      'Akamai::Open::Debug');
+
+# functional tests
 is($debug, $clone,                  'test for a singleton object');
 ok($debug->logger->debug('foo'),    'print a message of priority DEBUG');
 ok($debug->logger->info('foo'),     'print a message of priority INFO');
