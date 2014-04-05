@@ -1,4 +1,4 @@
-akamai-open-perl
-================
+akamai-open-client-perl
+=======================
 
-A Perl client to access the Akamai-Open-APIs
+This repository includes the Akamai OPEN API Client utils for Perl.
