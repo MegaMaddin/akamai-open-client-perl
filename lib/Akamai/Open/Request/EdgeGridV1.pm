@@ -4,7 +4,7 @@ BEGIN {
     $Akamai::Open::Request::EdgeGridV1::AUTHORITY = 'cpan:PROBST';
 }
 {
-    $Akamai::Open::Request::EdgeGridV1::VERSION = '0.01';
+    $Akamai::Open::Request::EdgeGridV1::VERSION = '0.02';
 }
 # ABSTRACT: Creates the signed authentication header for the Akamai Open API Perl clients
 
@@ -29,9 +29,10 @@ use constant {
 
 extends 'Akamai::Open::Request';
 
-has 'client'      => (is => 'rw', trigger => \&Akamai::Open::Debug::debugger);
-has 'signing_key' => (is => 'rw', isa => 'Str', trigger => \&Akamai::Open::Debug::debugger);
-has 'signature'   => (is => 'rw', trigger => \&Akamai::Open::Debug::debugger);
+has 'client'         => (is => 'rw', trigger => \&Akamai::Open::Debug::debugger);
+has 'signed_headers' => (is => 'rw', trigger => \&Akamai::Open::Debug::debugger);
+has 'signature'      => (is => 'rw', trigger => \&Akamai::Open::Debug::debugger);
+has 'signing_key'    => (is => 'rw', isa => 'Str', trigger => \&Akamai::Open::Debug::debugger);
 
 before 'sign_request' => sub {
     my $self = shift;
@@ -46,19 +47,25 @@ before 'sign_request' => sub {
 after 'sign_request' => sub {
     my $self = shift;
 
-    if(defined($self->signature())) {
+    if(defined($self->signature)) {
         my $header_name = HEADER_NAME;
-        my $auth_header = sprintf('%s %s;%s;%s;%s;%s', EDGEGRIDV1ALGO,
-                                                       CLIENT_TOKEN . $self->client->client_token(),
-                                                       ACCESS_TOKEN . $self->client->access_token(),
-                                                       TIMESTAMP_TOKEN . $self->timestamp(),
-                                                       NONCE_TOKEN . $self->nonce(),
-                                                       SIGNATURE_TOKEN . $self->signature());
+        my $auth_header = sprintf('%s %s', EDGEGRIDV1ALGO,
+                                           join(';', CLIENT_TOKEN . $self->client->client_token(),
+                                                     ACCESS_TOKEN . $self->client->access_token(),
+                                                     TIMESTAMP_TOKEN . $self->timestamp(),
+                                                     NONCE_TOKEN . $self->nonce(),
+                                                     SIGNATURE_TOKEN . $self->signature()));
 
         $self->debug->logger->debug("Setting Authorization header to $auth_header");
         $self->request->header($header_name => $auth_header);
     }
+
+    if(defined($self->signed_headers)) {
+        my $headers = $self->signed_headers;
+        $self->request->header($_ => $headers->{$_}) foreach(keys(%{$headers}));
+    }
 };
+
 
 sub sign_request {
     my $self = shift;
@@ -73,15 +80,15 @@ sub sign_request {
     # the encoded uri including the query string if present
     my $http_uri     = $self->request->uri->path_query;
     # the canonicalized headers which are choosed for signing
-    my $http_headers = ''; # XXX call canonicalize_headers here
+    my $http_headers = $self->canonicalize_headers;
     # the content hash for POST/PUT requests
     my $content_hash = $self->content_hash;
     # and the authorization header content
-    my $auth_header  = sprintf('%s %s;%s;%s;%s;', EDGEGRIDV1ALGO,
-                                                  CLIENT_TOKEN . $self->client->client_token(),
-                                                  ACCESS_TOKEN . $self->client->access_token(),
-                                                  TIMESTAMP_TOKEN . $self->timestamp(),
-                                                  NONCE_TOKEN . $self->nonce());
+    my $auth_header  = sprintf('%s %s;', EDGEGRIDV1ALGO,
+                                         join(';', CLIENT_TOKEN . $self->client->client_token,
+                                                   ACCESS_TOKEN . $self->client->access_token,
+                                                   TIMESTAMP_TOKEN . $self->timestamp,
+                                                   NONCE_TOKEN . $self->nonce));
     # now create the token to sign
     my $token = join("\t", $http_method, $http_scheme, $http_host, $http_uri, $http_headers, $content_hash, $auth_header);
 
@@ -104,8 +111,8 @@ sub content_hash {
     my $self = shift;
     my $content_hash = '';
 
-    if($self->request =~ m/(?:POST|PUT)/) {
-        my $content_hash = encode_base64(sha256($self->request->content));
+    if($self->request->method eq 'POST' && length($self->request->content) > 0) {
+        $content_hash = encode_base64(sha256($self->request->content));
         chomp($content_hash);
     }
 
@@ -113,8 +120,20 @@ sub content_hash {
 }
 
 sub canonicalize_headers {
-    # TBD - find use case
-    return;
+    my $self = shift;
+    my $sign_headers = $self->signed_headers || {};
+    return(join("\t", map {
+        my $header = lc($_);
+        my $value  = $sign_headers->{$_};
+
+        # trim leading and trailing whitespaces
+        $value =~ s{^\s+}{};
+        $value =~ s{\s$}{};
+        # replace repeated whitespaces
+        $value =~ s/\s{2,}/ /g;
+
+        "$header:$value";
+    } sort(keys(%{$sign_headers}))));
 }
 
 1;
