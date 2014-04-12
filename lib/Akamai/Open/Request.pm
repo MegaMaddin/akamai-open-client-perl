@@ -4,7 +4,7 @@ BEGIN {
     $Akamai::Open::Request::AUTHORITY = 'cpan:PROBST';
 }
 {
-    $Akamai::Open::Request::VERSION = '0.01';
+    $Akamai::Open::Request::VERSION = '0.02';
 }
 # ABSTRACT: The request handler for the Akamai Open API Perl clients
 
@@ -17,8 +17,6 @@ use POSIX qw(strftime);
 use HTTP::Request;
 use LWP::UserAgent;
 use Akamai::Open::Debug;
-
-our $VERSION = '0.01';
 
 use constant USER_AGENT => "Akamai::Open::Client/Perl-$^V";
 

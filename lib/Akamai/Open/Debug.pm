@@ -4,7 +4,7 @@ BEGIN {
     $Akamai::Open::Debug::AUTHORITY = 'cpan:PROBST';
 }
 {
-    $Akamai::Open::Debug::VERSION = '0.01';
+    $Akamai::Open::Debug::VERSION = '0.02';
 }
 # ABSTRACT: Debugging interface for the Akamai Open API Perl clients
 

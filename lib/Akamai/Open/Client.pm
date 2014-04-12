@@ -3,7 +3,7 @@ BEGIN {
     $Akamai::Open::Client::AUTHORITY = 'cpan:PROBST';
 }
 {
-    $Akamai::Open::Client::VERSION = '0.01';
+    $Akamai::Open::Client::VERSION = '0.02';
 }
 # ABSTRACT: The Akamai Open API Perl client structure for authentication data
 
