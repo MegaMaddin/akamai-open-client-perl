@@ -1,0 +1,12 @@
+Revision hostory for Akamai::Open::Client
+
+0.02 2014-04-12
+    - added header signing functionality which is needed for
+      future Akamai APIs
+    - added test case from the official Akamai-OPEN GitHub
+      repository
+    - Thanks to Jonathan Landis from Akamai for providing
+      hints and advices for the code/API and the tests cases
+      for the test suite
+    - their implementation could be found at GitHub
+      https://github.com/akamai-open/AkamaiOPEN-edgegrid-perl
