@@ -1,6 +1,11 @@
 Revision hostory for Akamai::Open::Client
 
-0.02 2014-04-12
+0.03    2014-04-18
+    - Cleaned out POD and versioning - let Dist::Zilla do this work
+    - Dist::Zilla awesomeness added - added several plugins to do
+      documentation and release work
+
+0.02    2014-04-12
     - added header signing functionality which is needed for
       future Akamai APIs
     - added test cases from the official Akamai-OPEN GitHub
