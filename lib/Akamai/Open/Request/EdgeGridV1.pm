@@ -1,11 +1,4 @@
 package Akamai::Open::Request::EdgeGridV1;
-
-BEGIN {
-    $Akamai::Open::Request::EdgeGridV1::AUTHORITY = 'cpan:PROBST';
-}
-{
-    $Akamai::Open::Request::EdgeGridV1::VERSION = '0.02';
-}
 # ABSTRACT: Creates the signed authentication header for the Akamai Open API Perl clients
 
 use strict;
@@ -144,11 +137,6 @@ __END__
 
 =encoding utf-8
 
-=head1 NAME
-
-Akamai::Open::Request::EdgeGridV1 - Creates the signed authentication
-header for the I<Akamai::Open> API Perl clients.
-
 =head1 ABOUT
 
 I<Akamai::Open::Request::EdgeGridV1> provides the signing functionality, 
@@ -158,16 +146,4 @@ API.
 The algorithm to sign a header for a request against the API, is 
 provided and described by Akamai and can be found L<here|https://developer.akamai.com/stuff/Getting_Started_with_OPEN_APIs/Client_Auth.html>.
 
-=head1 AUTHOR
-
-Martin Probst <internet+cpan@megamaddin.org>
-
-=head1 COPYRIGHT AND LICENSE
-
-This software is copyright (c) 2014 by Martin Probst.
-
-This is free software; you can redistribute it and/or modify it under
-the same terms as the Perl 5 programming language system itself.
-
 =cut
-

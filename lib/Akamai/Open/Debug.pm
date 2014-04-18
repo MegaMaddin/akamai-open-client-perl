@@ -1,11 +1,4 @@
 package Akamai::Open::Debug;
-
-BEGIN {
-    $Akamai::Open::Debug::AUTHORITY = 'cpan:PROBST';
-}
-{
-    $Akamai::Open::Debug::VERSION = '0.02';
-}
 # ABSTRACT: Debugging interface for the Akamai Open API Perl clients
 
 use strict;
@@ -58,11 +51,6 @@ __END__
 
 =encoding utf-8
 
-=head1 NAME
-
-Akamai::Open::Debug - Debugging interface for the L<Akamai::Open> API 
-Perl clients.
-
 =head1 SYNOPSIS
 
  use Akamai::Open::Debug;
@@ -105,16 +93,4 @@ After that you can pass your object to your client:
 
  my $client = Akamai::Open::Client->new(debug => $debug);
 
-=head1 AUTHOR
-
-Martin Probst <internet+cpan@megamaddin.org>
-
-=head1 COPYRIGHT AND LICENSE
-
-This software is copyright (c) 2014 by Martin Probst.
-
-This is free software; you can redistribute it and/or modify it under
-the same terms as the Perl 5 programming language system itself.
-
 =cut
-

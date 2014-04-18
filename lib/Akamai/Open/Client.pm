@@ -1,10 +1,4 @@
 package Akamai::Open::Client;
-BEGIN {
-    $Akamai::Open::Client::AUTHORITY = 'cpan:PROBST';
-}
-{
-    $Akamai::Open::Client::VERSION = '0.02';
-}
 # ABSTRACT: The Akamai Open API Perl client structure for authentication data
 
 use strict;
@@ -25,11 +19,6 @@ __END__
 =pod
 
 =encoding utf-8
-
-=head1 NAME
-
-Akamai::Open::Client - The I<Akamai::Open> API Perl client structure 
-for client specific authentication data.
 
 =head1 SYNOPSIS
 
@@ -52,17 +41,6 @@ against the I<Akamai::Open> API.
 This data is provided by Akamai and can be found in your 
 L<LUNA control center account|https://control.akamai.com/>, 
 inside the I<Manage APIs> tool.
-
-=head1 AUTHOR
-
-Martin Probst <internet+cpan@megamaddin.org>
-
-=head1 COPYRIGHT AND LICENSE
-
-This software is copyright (c) 2014 by Martin Probst.
-
-This is free software; you can redistribute it and/or modify it under
-the same terms as the Perl 5 programming language system itself.
 
 =cut
 
